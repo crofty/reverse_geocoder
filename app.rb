@@ -4,9 +4,9 @@ RACK_ENV = 'development'
 require 'rubygems'
 require 'sinatra/base'
 require "sequel"
-require 'ruby-debug'
 require 'yajl'
 require 'yajl/json_gem'
+require 'yaml'
 
 # Setup DB
 content = File.new("config/database.yml").read
