@@ -7,11 +7,11 @@ class Location
     @lng = lng
   end
 
-  def address
-    nearest_roads.first.name
+  def address(road_diff=0.01, place_diff=0.01)
+    [nearest_road(road_diff), nearest_place(place_diff)].compact.map{|x| x[:name]}.join(', ')
   end
 
-  def nearest_roads(diff=0.01)
+  def nearest_road(diff=0.01)
     xmin = @lng - diff
     xmax = @lng + diff
     ymin = @lat - diff
@@ -40,9 +40,27 @@ class Location
       AND wt.way_id = w.id
       AND wt.k IN ('name','ref')
       ORDER BY ordered_nodes.distance ASC, wt.k ASC
-      LIMIT 10
+      LIMIT 1
     SQL
-    DB[sql].all
+    DB[sql].first
+  end
+
+  def nearest_place(diff=0.01)
+    xmin = @lng - diff
+    xmax = @lng + diff
+    ymin = @lat - diff
+    ymax = @lat + diff
+    sql = <<-SQL
+      SELECT nt.v AS name
+        FROM nodes n,
+             node_tags nt
+        WHERE (n.geom && SetSRID('BOX3D(#{xmin} #{ymin}, #{xmax} #{ymax})))'::box3d,4326))
+        AND n.id = nt.node_id
+        AND nt.k = 'is_in'
+        ORDER BY ST_Distance(n.geom, GeomFromText('POINT(#{@lng} #{@lat})', 4326)) ASC
+        LIMIT 1
+      SQL
+    DB[sql].first
   end
 end
 

@@ -12,7 +12,7 @@ content = File.new("config/database.yml").read
 settings = YAML::load(content)[ENV['RACK_ENV']]
 DB = Sequel.connect "#{settings['adapter']}://#{settings['username']}:#{settings['password']}@#{settings['host']}/#{settings['database']}"
 
-Dir.glob(File.join(File.dirname(__FILE__), 'lib/*.rb')).each {|f| require f }
+:Dir.glob(File.join(File.dirname(__FILE__), 'lib/*.rb')).each {|f| require f }
 
 class ReverseGeocoder < Sinatra::Base
 
