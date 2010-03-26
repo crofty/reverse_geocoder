@@ -17,7 +17,7 @@ Dir.glob(File.join(File.dirname(__FILE__), 'lib/*.rb')).each {|f| require f }
 class ReverseGeocoder < Sinatra::Base
 
   get '/' do
-    JSON.generate Location.new(params[:lng],params[:lng]).address
+    JSON.generate Location.new(params[:lat],params[:lng]).address
   end
 
 end
