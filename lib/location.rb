@@ -42,7 +42,7 @@ class Location
       ORDER BY ordered_nodes.distance ASC, wt.k ASC
       LIMIT 10
     SQL
-    DB.run sql
+    DB[sql].all
   end
 end
 
