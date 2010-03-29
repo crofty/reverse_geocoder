@@ -7,7 +7,7 @@ class Location
     @lng = lng
   end
 
-  def address(road_diff=0.000001, place_diff=0.05)
+  def address(road_diff=0.000001, place_diff=0.02)
     [nearest_road(road_diff), nearest_place(place_diff)].compact.map{|x| x[:name]}.join(', ')
   end
 
